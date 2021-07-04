@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"boriskp.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从新房入住开始，就不停的折腾家中的网络设备，今年正好得闲，就从原本的软路由+蜗牛星际逐渐转变成了All in One的计划。看看有无机会写下我的服务器All in One设计思路（主要是懒）（偷笑） 本文仅针对对HBA阵列卡的分类与刷卡做简述，如有错漏欢迎指正。全文内容均来自网络收集。如需准确描述，请查回官网。  官方文档地址：https:&#x2F;&#x2F;docs.broadcom.com&#x2F;doc&#x2F;12352">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LSI 9217-8i HBA阵列卡 介绍 以及 卡刷 IT&#x2F;IR 模式">
+<meta property="og:url" content="https://boriskp.github.io/LSI-9217-8i/index.html">
+<meta property="og:site_name" content="Boris的备份库房">
+<meta property="og:description" content="从新房入住开始，就不停的折腾家中的网络设备，今年正好得闲，就从原本的软路由+蜗牛星际逐渐转变成了All in One的计划。看看有无机会写下我的服务器All in One设计思路（主要是懒）（偷笑） 本文仅针对对HBA阵列卡的分类与刷卡做简述，如有错漏欢迎指正。全文内容均来自网络收集。如需准确描述，请查回官网。  官方文档地址：https:&#x2F;&#x2F;docs.broadcom.com&#x2F;doc&#x2F;12352">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/nrWM6DQaiB87StU.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/7zVb9mIthOpq14s.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/nNMl4WT6PhQX3fg.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/TkIuS9fHFmvEB2g.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/Xo8sOhiIKZTNC7x.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/N3KuxzkIpOnQTHy.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/iMJopwmjSETO2fr.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/CnqPt6fNgZjWxQG.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/VaSrntmcsUh519H.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/28/nOZtgRrcDNGeyJ8.png">
+<meta property="article:published_time" content="2020-08-28T12:22:45.000Z">
+<meta property="article:modified_time" content="2021-06-27T07:28:47.901Z">
+<meta property="article:author" content="Boris">
+<meta property="article:tag" content="服务器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/28/nrWM6DQaiB87StU.jpg">
+
+<link rel="canonical" href="https://boriskp.github.io/LSI-9217-8i/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LSI 9217-8i HBA阵列卡 介绍 以及 卡刷 IT/IR 模式 | Boris的备份库房</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Boris的备份库房</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/LSI-9217-8i/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+      <meta itemprop="name" content="Boris">
+      <meta itemprop="description" content="Boris的备份博客，另一个鸡蛋篮子">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boris的备份库房">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LSI 9217-8i HBA阵列卡 介绍 以及 卡刷 IT/IR 模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-28 20:22:45" itemprop="dateCreated datePublished" datetime="2020-08-28T20:22:45+08:00">2020-08-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-27 15:28:47" itemprop="dateModified" datetime="2021-06-27T15:28:47+08:00">2021-06-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">折腾笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>从新房入住开始，就不停的折腾家中的网络设备，今年正好得闲，就从原本的软路由+蜗牛星际逐渐转变成了All in One的计划。看看有无机会写下我的服务器All in One设计思路（主要是懒）（偷笑）</p>
+<p>本文仅针对对HBA阵列卡的分类与刷卡做简述，如有错漏欢迎指正。<br>全文内容均来自网络收集。如需准确描述，请查回官网。</p>
+<p><img src="https://i.loli.net/2020/08/28/nrWM6DQaiB87StU.jpg" alt="lsi-naked.jpg"></p>
+<p>官方文档地址：<br><a target="_blank" rel="noopener" href="https://docs.broadcom.com/doc/12352067" title="LSI 9217-8i 官方说明">https://docs.broadcom.com/doc/12352067</a></p>
+<span id="more"></span>
+
+<h1 id="1-如何区分海量的阵列卡？"><a href="#1-如何区分海量的阵列卡？" class="headerlink" title="1.如何区分海量的阵列卡？"></a>1.如何区分海量的阵列卡？</h1><h2 id="1-1总览以及选购"><a href="#1-1总览以及选购" class="headerlink" title="1.1总览以及选购"></a>1.1总览以及选购</h2><p>如今随着网络云盘的成本越来越高 <del>(404也越来越多）</del><br>越来越多的人开始组建私有云系统（NAS）<br>在组建NAS的的过程中，不外乎要使用大量的硬盘，在多硬盘的解决方案上，使用阵列卡就是一个蛮不错的解决方式。这么多年来，商用服务器一直都是使用阵列卡作为多硬盘管理。</p>
+<p>对于家用服务器来说，阵列卡的优势便宜，稳定与超大的带机量（至少都是8块SAS/SATA硬盘）</p>
+<p>上面有提到，阵列卡是商用服务器的配件。稳定性自然不言而喻，而且据我所知，很多商用资产有个5年换新的说法。故淘汰下来的二手卡充视着市场，价格也极其低廉。</p>
+<p>举例子：（图就不配了）</p>
+<p>您可以去购物网站搜索“pcie转4口sata” 通常商家售卖的价格均在90-120元之间，或者您去某二手黄鱼买张阵列卡，通常价格在100-120元之间。其性价比自然不言而喻。</p>
+<p>不过二手黄鱼的阵列卡种类繁多，如何分辨需要选择的卡是我们今天要谈的第一步：</p>
+<p><img src="https://i.loli.net/2020/08/28/7zVb9mIthOpq14s.png" alt="cepznBuoIUFjg[1].png"></p>
+<p><strong>LSI HBA特性一览（数据来自LSI）</strong></p>
+<p><img src="https://i.loli.net/2020/08/28/nNMl4WT6PhQX3fg.png" alt="ce8sQF8eQO7gc[1].png"></p>
+<p><strong>LSI HBA功耗一览（数据来自LSI）</strong></p>
+<p>如上两张图片，我们可以很好的看出，在一众阵列卡中，实际就只有3种芯片的分别，其余都是IO接口等外部其他区别，从功耗栏目可以得出，现在情况下，SAS2116不是很适合家用，其余就剩下SAS2008与SAS2308两个芯片组的产品了。通过上图1，不难发现，SAS2008走的是PCIe 2.0通道，而SAS2308走的是PCIe 3.0通道.这里就要根据您的主板选择了。（不过还是建议您购入SAS2308芯片组的卡，毕竟买新不买旧嘛）</p>
+<h2 id="1-2-IT模式IR模式区别"><a href="#1-2-IT模式IR模式区别" class="headerlink" title="1.2 IT模式IR模式区别"></a>1.2 IT模式IR模式区别</h2><p>当您已经准备好选购SAS2308芯片组产品时，您需要明确如下2个概念：</p>
+<p>1）IT模式(Initiator Target)<br>也就是HBA卡，单独的卡片不负责处理RAID信息，如需RAID则需要进入系统通过软件进行重组。</p>
+<p>2）IR模式(Integrated RAID)<br>也就是RAID卡，卡片自身带有系统，可以直连硬盘组成RAID，当你进入系统后，所见的硬盘就已经是组好RAID的形态了。</p>
+<p><img src="https://i.loli.net/2020/08/28/TkIuS9fHFmvEB2g.jpg" alt="box.jpg"></p>
+<p>在很久之前的商用服务器上，IR模式的好处是单独的卡片计算负责RAID，降低系统本体的运算量，模块化的独立设计，也可以更好的处理故障，最大程度的保证系统稳定运行以及数据安全。（出问题了换张卡就行，不用去系统中大量的调试）不过我们既然是家用，没有商用服务器那么高的标准要求；同时，现如今的CPU计算能力也非常出色，软RAID能力不输于硬RAID，而且现在的软件设计也比起之前高效很多。故我们仅需要一张IT模式的HBA卡就OK~</p>
+<p>以上是我个人对两种模式的粗浅见解，详细请查如下官方链接</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.supermicro.org.cn/support/faqs/faq.cfm?faq=16169">https://www.supermicro.org.cn/support/faqs/faq.cfm?faq=16169</a></p>
+<h2 id="1-3-SAS2308各个版本以及马甲版"><a href="#1-3-SAS2308各个版本以及马甲版" class="headerlink" title="1.3 SAS2308各个版本以及马甲版"></a>1.3 SAS2308各个版本以及马甲版</h2><p><strong>首先要说明的是SAS2308，在同级别的卡硬件上无区别，区别在于固件。</strong></p>
+<p>SAS2308的常见型号：LSI 9217/9207/HP 9205/浪潮超微2308 等</p>
+<p>9217=2308 IR模式</p>
+<p>9207=2308 IT模式</p>
+<p><strong>（同级别的 2308卡，IR模式就等于9217  IT模式就等于9207）</strong></p>
+<p>LSI SAS2308第3代8端口6Gb/s </p>
+<p><img src="https://i.loli.net/2020/08/28/Xo8sOhiIKZTNC7x.jpg" alt="1.jpg"></p>
+<p>相对于上一代的SAS2008主要的变化是：<br>系统总线接口由PCI Express x8 2.0（5Gb/s）升级为x8 PCIe 3.0<br>（每个lane的速率为8.0Gb/s全双工，实际效率比2.0提升一倍），</p>
+<p>另外集成的PowerPC 440处理器频率由533MHz提升到800MHz。<br>比DELL H200 IBM M1015（LSI 9211 9200 等）高一个档次。</p>
+<p>这也是我们选择SAS2308的最主要原因。</p>
+<p><img src="https://i.loli.net/2020/08/28/N3KuxzkIpOnQTHy.jpg" alt="44.jpg"></p>
+<p>因为我手头的硬盘有限，实测链接SATA硬盘最高12T单盘完全OK。<br>不过虽然我实测可以连接12T硬盘，但如果您有多块大容量（大于10T）硬盘，我不建议您使用这个卡，建议使用LSI 9300-8I/9400-8I，毕竟他们可是有12Gb/s的速率。</p>
+<h2 id="1-4-SAS2308的连接器"><a href="#1-4-SAS2308的连接器" class="headerlink" title="1.4 SAS2308的连接器"></a>1.4 SAS2308的连接器</h2><p>如下图所示。SAS2308有 2 x Internal SFF-8087的连接端口，使用2条Amphenol的SSF-8087数据线，可以转换出8个SATA端口。</p>
+<p>这里要多说一句：强烈推荐使用Amphenol品牌的数据线，其他品牌的数据线我不清楚，但毕竟Amphenol的数据线是企业级的数据线，同时他家的线材大多也带有SGPIO功能，可以直接检测你的硬盘健康程度。不用依靠其他软件运行，关于更多SGPIO功能，还请您自行google。本文不表。</p>
+<p><img src="https://i.loli.net/2020/08/28/iMJopwmjSETO2fr.jpg" alt="lsi-feature.jpg"></p>
+<h2 id="1-5-LSI-9217-8i-购买提醒以及配件选择"><a href="#1-5-LSI-9217-8i-购买提醒以及配件选择" class="headerlink" title="1.5 LSI 9217-8i 购买提醒以及配件选择"></a>1.5 LSI 9217-8i 购买提醒以及配件选择</h2><p>如上文所谈，LSI 9217-8i 通常我们都会在二手黄鱼或者TB上购买，<br>通常这类卡都是服务器拆机二手卡，当然都是IR模式的卡；你可以让卖家帮忙刷成IT模式（通常会收取一定的费用）。这也是推荐自己购买IR卡自己刷IT模式的地方。</p>
+<p>另外就是需要买一条阵列卡数据线啦，这里线材如果卖家不自带，建议还是选购全新线材，以来全新线材无暗病，也方便售后，其次长度，接头规格可控，不会出现机箱理线困难的情况。</p>
+<p><img src="https://i.loli.net/2020/08/28/CnqPt6fNgZjWxQG.jpg" alt="3.jpg"><br><img src="https://i.loli.net/2020/08/28/VaSrntmcsUh519H.jpg" alt="2.jpg"></p>
+<h1 id="2-LSI-9217-8i-HBA-卡刷-IT-模式"><a href="#2-LSI-9217-8i-HBA-卡刷-IT-模式" class="headerlink" title="2.LSI 9217-8i HBA 卡刷 IT 模式"></a>2.LSI 9217-8i HBA 卡刷 IT 模式</h1><p>准备工具：U盘1个，1G以上容量。</p>
+<h2 id="2-1-下载固件"><a href="#2-1-下载固件" class="headerlink" title="2.1 下载固件"></a>2.1 下载固件</h2><p>进入官网的固件下载页面</p>
+<p><a target="_blank" rel="noopener" href="https://docs.broadcom.com/docs/12350569">https://docs.broadcom.com/docs/12350569</a></p>
+<p>确认你要下载的固件名称为：</p>
+<blockquote>
+<p>9217_8i_Package_P20_IR_IT_FW_BIOS_for_MSDOS_Windows.zip</p>
+</blockquote>
+<p>这个固件名称就是9217最新版的P20固件了~<br>可能有的朋友在JS那边听说过P20固件如何如何，其实自我使用下来也就那么回事（笑）</p>
+<p>如果是别的型号或者固件集，可以官网刷搜索对应的型号，找到对应的固件。</p>
+<h2 id="2-2-制作可引导的U盘"><a href="#2-2-制作可引导的U盘" class="headerlink" title="2.2 制作可引导的U盘"></a>2.2 制作可引导的U盘</h2><p>虽然官方可以从win下直接使用官方工具MSM进行刷写固件操作，不过经过我的观察，官网MSM软件仅可以刷写BIOS和升级操作，不可以让IR模式与IT模式互相刷写，所以还是需要在DOS环境下操作。</p>
+<p>这里推荐使用freedos环境进行刷写固件操作。</p>
+<p>下载U盘启动工具rufus，插入U盘运行rufus，引导类型选FreeDos，其他默认，点击「开始」写盘，即可完成。</p>
+<p>rufus官网：<br><a target="_blank" rel="noopener" href="http://rufus.ie/">http://rufus.ie/</a></p>
+<p><img src="https://i.loli.net/2020/08/28/nOZtgRrcDNGeyJ8.png" alt="Snipaste_2020-08-28_19-28-43.png"></p>
+<blockquote>
+<p>因为rufus自带freedos，就不用再去找freedos的镜像了。</p>
+</blockquote>
+<p>解压<br><code>9217-8i_Package_P20_IR_IT_Firmware_BIOS_for_MSDOS_Windows</code> 并将以下三个文件复制到u盘根目录中：</p>
+<ul>
+<li><code>sasbios_rel/mptsas2.rom</code></li>
+<li><code>Firmware/HBA_9207_8i_IT/9207-8.bin</code></li>
+<li><code>sas2flsh_dos_rel/sas2flsh.exe</code></li>
+</ul>
+<h2 id="2-3-启动FreeDOS环境并刷写固件"><a href="#2-3-启动FreeDOS环境并刷写固件" class="headerlink" title="2.3 启动FreeDOS环境并刷写固件"></a>2.3 启动FreeDOS环境并刷写固件</h2><p>将制作好的U盘插入电脑，选择u盘启动，进入DOS环境。</p>
+<p>进入后你应该进入的是A:\，需要先去到C::</p>
+<p>直接输入：<code>c:/</code> 进入。</p>
+<p>查看刚才拷贝的三个文件是否在此目录下：</p>
+<p>运行命令</p>
+<pre><code>dir</code></pre>
+<blockquote>
+<p>在列出的项目中寻找如上3个文件是否名称均与其一致。</p>
+</blockquote>
+<p>然后执行以下命令：</p>
+<pre><code>sas2flsh -o -e 6</code></pre>
+<blockquote>
+<p>这命令是将卡进入高级模式-o, 然后擦除闪存-e 其中6代表Clean flash (erase everything except manufacturing area)；也有人用7，但那个是Erase complete flash，最后还要重写SAS Address才行，建议还是用6。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意： 现在处于关键阶段，不要重启，否则该卡可能会处于一个不可恢复的状态！（俗称变砖）</strong></p>
+</blockquote>
+<p>输入以下命令：</p>
+<pre><code>sas2flsh -o -f 9207-8.bin -b mptsas2.rom</code></pre>
+<blockquote>
+<p>该命令将把卡再次进入高级模式<code>-o</code>，然后刷新固件 <code>-f 9207-8.bin</code> 和 bios <code>-b mtpsas2.rom</code>。</p>
+</blockquote>
+<p>这一步有些慢，建议多等等，待最后出现如下信息后，再做下一步动作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Finished Processing Commands Successfully.</span><br><span class="line">Exiting SAS2Flash.</span><br></pre></td></tr></table></figure>
+
+<p>完成后，执行 <code>sas2flsh -listall</code> 检查安装是否正确完成。在重启前，要确保正确完成，否则可能无法恢复。</p>
+<p>执行此条命令应该会输出你卡现在固件的信息。确认无误后再做重启动作。</p>
+<p>重启后按 CTRl-C 进入HAB卡的bois，应该可以看到已IT模式运行P20固件。</p>
+<p>至此，刷卡完毕。当然刷回IR模式也是同理，换文件即可~</p>
+<h1 id="尾巴："><a href="#尾巴：" class="headerlink" title="尾巴："></a>尾巴：</h1><p>有人可能会说了：单个硬盘在IR模式下初始化然后格式化，也可以正常使用，所以不懂IT模式的优势在哪？</p>
+<p>其实如果你像我一样是个多硬盘用户，单独初始化的IR模式，将带来主机虚拟化直通异常，虚拟机无法查看硬盘信息等等一系列问题。所以还是建议直接刷IT吧！</p>
+<p>另外，官方给出的建议运行环境温度是：0~55℃。但根据我个人的使用，实际温度经查飙升至70℃左右，个人分析可能是因为没有商用服务器环境里的风道所导致。（或者是机房空调？）</p>
+<p>卡片的散热鳍片简直烫的惊人，考虑到家庭使用，建议在散热鳍片上增加一个4010小风扇对应主动降温，延长使用寿命。</p>
+<p>参考资料：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.broadcom.com/doc/12352067">https://docs.broadcom.com/doc/12352067</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6b4476a53806">https://www.jianshu.com/p/6b4476a53806</a><br><a target="_blank" rel="noopener" href="http://server.zol.com.cn/322/3228725_all.html">http://server.zol.com.cn/322/3228725_all.html</a><br><a target="_blank" rel="noopener" href="https://marcan.st/2016/05/crossflashing-the-fujitsu-d2607/">https://marcan.st/2016/05/crossflashing-the-fujitsu-d2607/</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Boris
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://boriskp.github.io/LSI-9217-8i/" title="LSI 9217-8i HBA阵列卡 介绍 以及 卡刷 IT/IR 模式">https://boriskp.github.io/LSI-9217-8i/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-check"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag"># 服务器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/new-blog-with-hexo/" rel="prev" title="用hexo搭建github博客详细全图解-转自简书">
+      <i class="fa fa-chevron-left"></i> 用hexo搭建github博客详细全图解-转自简书
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/not-connected-to-the-github/" rel="next" title="解决Github打不开问题">
+      解决Github打不开问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E6%B5%B7%E9%87%8F%E7%9A%84%E9%98%B5%E5%88%97%E5%8D%A1%EF%BC%9F"><span class="nav-text">1.如何区分海量的阵列卡？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E6%80%BB%E8%A7%88%E4%BB%A5%E5%8F%8A%E9%80%89%E8%B4%AD"><span class="nav-text">1.1总览以及选购</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-IT%E6%A8%A1%E5%BC%8FIR%E6%A8%A1%E5%BC%8F%E5%8C%BA%E5%88%AB"><span class="nav-text">1.2 IT模式IR模式区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-SAS2308%E5%90%84%E4%B8%AA%E7%89%88%E6%9C%AC%E4%BB%A5%E5%8F%8A%E9%A9%AC%E7%94%B2%E7%89%88"><span class="nav-text">1.3 SAS2308各个版本以及马甲版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-SAS2308%E7%9A%84%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="nav-text">1.4 SAS2308的连接器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-LSI-9217-8i-%E8%B4%AD%E4%B9%B0%E6%8F%90%E9%86%92%E4%BB%A5%E5%8F%8A%E9%85%8D%E4%BB%B6%E9%80%89%E6%8B%A9"><span class="nav-text">1.5 LSI 9217-8i 购买提醒以及配件选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-LSI-9217-8i-HBA-%E5%8D%A1%E5%88%B7-IT-%E6%A8%A1%E5%BC%8F"><span class="nav-text">2.LSI 9217-8i HBA 卡刷 IT 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E5%9B%BA%E4%BB%B6"><span class="nav-text">2.1 下载固件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%88%B6%E4%BD%9C%E5%8F%AF%E5%BC%95%E5%AF%BC%E7%9A%84U%E7%9B%98"><span class="nav-text">2.2 制作可引导的U盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%90%AF%E5%8A%A8FreeDOS%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%B7%E5%86%99%E5%9B%BA%E4%BB%B6"><span class="nav-text">2.3 启动FreeDOS环境并刷写固件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%BE%E5%B7%B4%EF%BC%9A"><span class="nav-text">尾巴：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Boris"
+      src="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+  <p class="site-author-name" itemprop="name">Boris</p>
+  <div class="site-description" itemprop="description">Boris的备份博客，另一个鸡蛋篮子</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Boris</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">49k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">44 分钟</span>
+</div>
+<div></div>
+&rarr;
+<!-- 在网页底部添加网站运行时间 -->
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/21/2016 00:00:00");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = " 持续运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+&larr;
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

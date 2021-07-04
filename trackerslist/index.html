@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"boriskp.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="相信很多小伙伴都有如下的经历：在TR或者UT之类的BT客户端上，打开了一个.torrent种子，下载非常缓慢，经常处于10KB&#x2F;S到100KB&#x2F;S的区间，有时候甚至没有速度，每次打开PC就挂着这个种子，时间久了，也许就没有了下载的动力…………有的种子还好，全网努力搜索，还可能找到一些替代品；但有的种子，你无论如何都找不到可以替代的，又是那种非常古老的稀缺资源。这个时候你就需要trackerslis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BT种子获取更多连接的方案（增加trackerslist）">
+<meta property="og:url" content="https://boriskp.github.io/trackerslist/index.html">
+<meta property="og:site_name" content="Boris的备份库房">
+<meta property="og:description" content="相信很多小伙伴都有如下的经历：在TR或者UT之类的BT客户端上，打开了一个.torrent种子，下载非常缓慢，经常处于10KB&#x2F;S到100KB&#x2F;S的区间，有时候甚至没有速度，每次打开PC就挂着这个种子，时间久了，也许就没有了下载的动力…………有的种子还好，全网努力搜索，还可能找到一些替代品；但有的种子，你无论如何都找不到可以替代的，又是那种非常古老的稀缺资源。这个时候你就需要trackerslis">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://beerpay.io/ngosang/trackerslist/badge.svg?style=flat">
+<meta property="og:image" content="https://user-images.githubusercontent.com/8065899/38598199-0d2e684c-3d8e-11e8-8b21-3cd1f3c7580a.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/29/BshpDejJP8wlI2Y.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/29/EtSJka8DCLmMYgN.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/29/1jXxsLkhMCBwHqD.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/29/J4bHoMGCRD3hIWZ.png">
+<meta property="article:published_time" content="2019-08-27T12:46:40.000Z">
+<meta property="article:modified_time" content="2021-06-27T07:28:47.903Z">
+<meta property="article:author" content="Boris">
+<meta property="article:tag" content="PT">
+<meta property="article:tag" content="做种">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://beerpay.io/ngosang/trackerslist/badge.svg?style=flat">
+
+<link rel="canonical" href="https://boriskp.github.io/trackerslist/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BT种子获取更多连接的方案（增加trackerslist） | Boris的备份库房</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Boris的备份库房</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/trackerslist/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+      <meta itemprop="name" content="Boris">
+      <meta itemprop="description" content="Boris的备份博客，另一个鸡蛋篮子">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boris的备份库房">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BT种子获取更多连接的方案（增加trackerslist）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-27 20:46:40" itemprop="dateCreated datePublished" datetime="2019-08-27T20:46:40+08:00">2019-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-27 15:28:47" itemprop="dateModified" datetime="2021-06-27T15:28:47+08:00">2021-06-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%B3%E4%BA%8EPT%E7%9A%84%E4%B8%A4%E4%B8%89%E4%BA%8B/" itemprop="url" rel="index"><span itemprop="name">关于PT的两三事</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>相信很多小伙伴都有如下的经历：<br>在TR或者UT之类的BT客户端上，打开了一个<code>.torrent</code>种子，下载非常缓慢，经常处于10KB/S到100KB/S的区间，有时候甚至没有速度，每次打开PC就挂着这个种子，时间久了，也许就没有了下载的动力…………<br>有的种子还好，全网努力搜索，还可能找到一些替代品；但有的种子，你无论如何都找不到可以替代的，又是那种非常古老的稀缺资源。这个时候你就需要<strong>trackerslist</strong>的出场了。</p>
+<span id="more"></span>
+
+<h2 id="trackerslist"><a href="#trackerslist" class="headerlink" title="trackerslist"></a>trackerslist</h2><p>*<em><a target="_blank" rel="noopener" href="https://github.com/ngosang/trackerslist">trackerslist</a>**是GitHub上，一位西班牙程序员</em>Diego Heras*制作的表单，这个list中含有现今世界上绝大多数的明文Trackers服务器链接地址。如果你的种子没有速度，可以尝试添加上这个表单中的Trackers，没准可以让你的种子活下去~</p>
+<p>首先当然是需要看看<strong>trackerslist</strong>的<a target="_blank" rel="noopener" href="https://github.com/ngosang/trackerslist/blob/master/README.md">README.md</a>了，在这个README.md中<em>Diego Heras</em>给我们详细介绍了public BitTorrent trackers的种类与区分，下面是本人对此的中英文对照翻译。</p>
+<hr>
+<blockquote>
+<h1 id="ngosang-trackerslist"><a href="#ngosang-trackerslist" class="headerlink" title="ngosang/trackerslist"></a>ngosang/trackerslist</h1><p>Updated list of public BitTorrent trackers</p>
+</blockquote>
+<blockquote>
+<p>公共BT-tracker更新列表</p>
+<h4 id="Updated-2019-08-27"><a href="#Updated-2019-08-27" class="headerlink" title="Updated: 2019-08-27"></a>Updated: 2019-08-27</h4><p><em>These lists are automatically updated every day:</em></p>
+</blockquote>
+<blockquote>
+<p>如下的表单每天都会自动更新</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>trackers_best (20 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt</a></li>
+<li>最好的20个trackers</li>
+<li>trackers_all (93 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt</a></li>
+<li>全部的93个trackers</li>
+<li>trackers_all_udp (49 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_udp.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_udp.txt</a></li>
+<li>全部的UDP-trackers，共计49个</li>
+<li>trackers_all_http (34 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_http.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_http.txt</a></li>
+<li>全部的http-trackers，共计34个</li>
+<li>trackers_all_https (10 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_https.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_https.txt</a></li>
+<li>全部的https-trackers，共计10个</li>
+<li>trackers_all_ws (4 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ws.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ws.txt</a></li>
+<li>全部的wws-trackers，共计4个</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Are you having DNS problems? These lists contains the same trackers but with IP addresses instead of domains:<br>如果你的DNS有一些问题（例如DNS污染等）你可以通过IP来链接上述表单中的trackers，而不是通过域名链接：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>trackers_best_ip (20 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt</a></li>
+<li>最好的20个trackers</li>
+<li>trackers_all_ip (80 trackers) =&gt; <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt">https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt</a></li>
+<li>全部的80个trackers</li>
+</ul>
+</blockquote>
+<blockquote>
+<h5 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h5><ul>
+<li>A bot automatically checks the trackers and updates the lists.</li>
+<li>系统机器人会自动查验全部trackers，并自动更新表单。</li>
+<li>Trackers with the same domain or pointing to the same IP address are removed. Check out the <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/blacklist.txt">blacklist</a>.</li>
+<li>重复域名或者重复IP的表单将会被删除，详见：<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ngosang/trackerslist/master/blacklist.txt">黑名单</a>.</li>
+<li>Trackers are sorted by popularity and latency (from best to worst).</li>
+<li>Trackers表单的顺序是按照热度以及迟延情况排序（从好到坏）</li>
+<li>WebSocket trackers (AKA WebTorrent, ws, wss) are supported by few clients. <a target="_blank" rel="noopener" href="https://webtorrent.io/">More info</a>.</li>
+<li>只有少数的客户端支持WebSocket trackers(AKA WebTorrent, ws, wss)，<a target="_blank" rel="noopener" href="https://webtorrent.io/">点我查详细</a>.</li>
+<li>Lists with IP addresses can be shorter because <a target="_blank" rel="noopener" href="https://www.cloudflare.com/ips/">Cloudflare IPs</a> are removed.</li>
+<li>IP地址的trackers表单比域名表单少，原因是我们在IP表单中删除了包含启用CDN的部分。<a target="_blank" rel="noopener" href="https://www.cloudflare.com/ips/">CDN列表</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<h5 id="Contribute"><a href="#Contribute" class="headerlink" title="Contribute"></a>Contribute</h5><ul>
+<li>Do you know more public trackers? =<a target="_blank" rel="noopener" href="https://github.com/ngosang/trackerslist/issues/new">Open a new issue</a></li>
+<li>如果你知道更多的公共trackers，欢迎告诉我</li>
+<li>Any of the trackers is not working properly? =<a target="_blank" rel="noopener" href="https://github.com/ngosang/trackerslist/issues/new">Open a new issue</a></li>
+<li>如果有不工作的trackers，欢迎告诉我</li>
+</ul>
+</blockquote>
+<blockquote>
+<h5 id="Contact"><a href="#Contact" class="headerlink" title="Contact"></a>Contact</h5><p>ngosang [@] hotmail [.es]</p>
+</blockquote>
+<blockquote>
+<p><em>原Po联络方式</em></p>
+<h5 id="Donations"><a href="#Donations" class="headerlink" title="Donations"></a>Donations</h5><p>捐助信息：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://beerpay.io/ngosang/trackerslist"><img src="https://beerpay.io/ngosang/trackerslist/badge.svg?style=flat" alt="Beerpay"></a></li>
+<li>BTC: <a target="_blank" rel="noopener" href="https://btc.com/1jmkeulx9da8ssszlsesvsrvs1ivcu2wnt">1JMkeuLX9DA8sssZLSeSvSRvS1iVCu2wNT</a></li>
+<li>ETH: <a target="_blank" rel="noopener" href="https://etherscan.io/address/0x50A79a95878dd588A55E909dAc2eA3962D2fA46c">0x50A79a95878dd588A55E909dAc2eA3962D2fA46c</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<h5 id="Third-party-tools"><a href="#Third-party-tools" class="headerlink" title="Third-party tools"></a>Third-party tools</h5><p>第三方工具</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/GerryFerdinandus/bittorrent-tracker-editor">bittorrent-tracker-editor</a> to add these trackers to your .torrent files</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/blind-oracle/transmission-trackers">transmission python script</a> to add these trackers to <a target="_blank" rel="noopener" href="https://github.com/transmission/transmission">transmission</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/AndrewMarchukov/tracker-add">transmission bash script 1</a> to add these trackers to <a target="_blank" rel="noopener" href="https://github.com/transmission/transmission">transmission</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/oilervoss/transmission">transmission bash script 2</a> to add these trackers to <a target="_blank" rel="noopener" href="https://github.com/transmission/transmission">transmission</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<h5 id="Third-party-online-tools"><a href="#Third-party-online-tools" class="headerlink" title="Third-party online tools"></a>Third-party online tools</h5><p>第三方在线工具</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://torrenteditor.com/">torrenteditor</a> to add these trackers to your .torrent files</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="在Transmission中添加trackerslist"><a href="#在Transmission中添加trackerslist" class="headerlink" title="在Transmission中添加trackerslist"></a>在Transmission中添加trackerslist</h2><p><strong>以下方案均在Unix版本与Synology版本Transmission中的<a target="_blank" rel="noopener" href="https://github.com/ronggang/transmission-web-control">transmission-web-control</a> Web页面操作</strong></p>
+<p><strong>Win版本、Mac OS版本未进行测试</strong></p>
+<p><strong>原版Transmission的Web Client没有此项功能！</strong></p>
+<p><strong>原版Transmission的Web Client长这样，<a target="_blank" rel="noopener" href="https://transmissionbt.com/images/screenshots/Clutch-Large.jpg" title="https://transmissionbt.com/images/screenshots/Clutch-Large.jpg">点击查看</a></strong></p>
+<p>在拿到你需要的trackerslist后就需要往你原来的种子中添加新trackers了，因为我用的比较多的是Transmission，这里教大家在Transmission中添加新trackers的方法：<br>首先打开你的Transmission，登陆一气呵成。<br><img src="https://user-images.githubusercontent.com/8065899/38598199-0d2e684c-3d8e-11e8-8b21-3cd1f3c7580a.png"></p>
+<p>然后根据如下图的顺序，找到你需要增加trackerslist的种子，点击选中，在下方的“服务器”中，找到如下图“标记3”的地方点击增加trackers</p>
+<p><img src="https://i.loli.net/2019/08/29/BshpDejJP8wlI2Y.png"></p>
+<p>在弹出的框中，每行增加一个Tracker（也就是直接“复制”+“黏贴”）</p>
+<p><img src="https://i.loli.net/2019/08/29/EtSJka8DCLmMYgN.png"></p>
+<p>增加完成后等一杯咖啡的时间，你新增加的所有Tracker就会自动刷新并连接上了~</p>
+<p><img src="https://i.loli.net/2019/08/29/1jXxsLkhMCBwHqD.png"></p>
+<p>怎么样？试试速度吧~</p>
+<p><img src="https://i.loli.net/2019/08/29/J4bHoMGCRD3hIWZ.png"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Boris
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://boriskp.github.io/trackerslist/" title="BT种子获取更多连接的方案（增加trackerslist）">https://boriskp.github.io/trackerslist/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-check"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PT/" rel="tag"># PT</a>
+              <a href="/tags/%E5%81%9A%E7%A7%8D/" rel="tag"># 做种</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/gzhcz-gznz/" rel="prev" title="从广州火车站到广州南站的路书">
+      <i class="fa fa-chevron-left"></i> 从广州火车站到广州南站的路书
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/new-blog-with-hexo/" rel="next" title="用hexo搭建github博客详细全图解-转自简书">
+      用hexo搭建github博客详细全图解-转自简书 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#trackerslist"><span class="nav-text">trackerslist</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ngosang-trackerslist"><span class="nav-text">ngosang&#x2F;trackerslist</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Updated-2019-08-27"><span class="nav-text">Updated: 2019-08-27</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Notes"><span class="nav-text">Notes</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Contribute"><span class="nav-text">Contribute</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Contact"><span class="nav-text">Contact</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Donations"><span class="nav-text">Donations</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Third-party-tools"><span class="nav-text">Third-party tools</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Third-party-online-tools"><span class="nav-text">Third-party online tools</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Transmission%E4%B8%AD%E6%B7%BB%E5%8A%A0trackerslist"><span class="nav-text">在Transmission中添加trackerslist</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Boris"
+      src="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+  <p class="site-author-name" itemprop="name">Boris</p>
+  <div class="site-description" itemprop="description">Boris的备份博客，另一个鸡蛋篮子</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Boris</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">49k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">44 分钟</span>
+</div>
+<div></div>
+&rarr;
+<!-- 在网页底部添加网站运行时间 -->
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/21/2016 00:00:00");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = " 持续运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+&larr;
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"boriskp.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="相信每位使用SS(R)的小伙伴都非常想对自己使用的机场线路进行一个全面的测速，目前比较常用的测试办法是通过设置代理为全局模式访问测速网站 Fast 和 SpeedTest 进行测试。 这样的办法只能分别对每一个节点进行测速，比较繁琐和复杂。前段时间在看毒药大佬的测速文章，发现大佬都是使用统一的工具进行测试 继而找寻了一番，最后在Github上发现了一个项目：SSRSpeed-基于Shadowsoc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSRSpeed-基于Shadowsocks(R)的批量测速工具">
+<meta property="og:url" content="https://boriskp.github.io/SSRSpeed/index.html">
+<meta property="og:site_name" content="Boris的备份库房">
+<meta property="og:description" content="相信每位使用SS(R)的小伙伴都非常想对自己使用的机场线路进行一个全面的测速，目前比较常用的测试办法是通过设置代理为全局模式访问测速网站 Fast 和 SpeedTest 进行测试。 这样的办法只能分别对每一个节点进行测速，比较繁琐和复杂。前段时间在看毒药大佬的测速文章，发现大佬都是使用统一的工具进行测试 继而找寻了一番，最后在Github上发现了一个项目：SSRSpeed-基于Shadowsoc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/09/07/kK5TQ2Nxc4GAREs.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/07/UJRlhYsP2xTdLFo.png">
+<meta property="article:published_time" content="2020-09-07T06:11:41.000Z">
+<meta property="article:modified_time" content="2021-06-27T07:28:47.901Z">
+<meta property="article:author" content="Boris">
+<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="VPS">
+<meta property="article:tag" content="插件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/09/07/kK5TQ2Nxc4GAREs.png">
+
+<link rel="canonical" href="https://boriskp.github.io/SSRSpeed/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SSRSpeed-基于Shadowsocks(R)的批量测速工具 | Boris的备份库房</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Boris的备份库房</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/SSRSpeed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+      <meta itemprop="name" content="Boris">
+      <meta itemprop="description" content="Boris的备份博客，另一个鸡蛋篮子">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boris的备份库房">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSRSpeed-基于Shadowsocks(R)的批量测速工具
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-07 14:11:41" itemprop="dateCreated datePublished" datetime="2020-09-07T14:11:41+08:00">2020-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-27 15:28:47" itemprop="dateModified" datetime="2021-06-27T15:28:47+08:00">2021-06-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">折腾笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>相信每位使用SS(R)的小伙伴都非常想对自己使用的机场线路进行一个全面的测速，目前比较常用的测试办法是通过设置代理为全局模式访问测速网站 <a target="_blank" rel="noopener" href="https://fast.com/">Fast</a> 和 <a target="_blank" rel="noopener" href="https://www.speedtest.net/">SpeedTest</a> 进行测试。</p>
+<p>这样的办法只能分别对每一个节点进行测速，比较繁琐和复杂。前段时间在看毒药大佬的测速文章，发现大佬都是使用统一的工具进行测试</p>
+<p>继而找寻了一番，最后在Github上发现了一个项目：SSRSpeed-基于Shadowsocks(R)的批量测速工具 </p>
+<p>使用过之后发现非常不错。这里就水一个简单的Windows和Linux下的配置和使用教程。</p>
+<span id="more"></span>
+
+
+<hr>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/NyanChanMeow/SSRSpeed/">https://github.com/NyanChanMeow/SSRSpeed/</a></p>
+<p><em>因不可描述的原因，原作者删除了“中文版Readme”</em></p>
+<p><strong>请严格遵守项目说明：在您公开发布测速结果之前请务必征得节点拥有者的同意以避免一些令人烦恼的事情</strong></p>
+<p>注意：理性测速！<br>因为你在测速的时候就是在挖掘线路服务器和你本地网络之间的一个临界值，对其他正在使用线路的用户会有一定影响；另外不同地区不同时间线路的效果也会有一定差别。</p>
+<hr>
+<h1 id="Windows下配置及使用"><a href="#Windows下配置及使用" class="headerlink" title="Windows下配置及使用"></a>Windows下配置及使用</h1><p>该项目所需环境Python3.6+，关于Python的安装请访问<a target="_blank" rel="noopener" href="https://www.python.org/downloads/"> https://www.python.org/downloads/</a> 自行下载3.6+版本并安装和配置。<br>（截止本文发出前，Python已经更新到3.8.5版本）</p>
+<p><strong>注意：在安装Python的时候，请务必勾选中如下图所示的地方，别无脑下一步。</strong></p>
+<p><img src="https://i.loli.net/2020/09/07/kK5TQ2Nxc4GAREs.png" alt="Snipaste_2020-09-07_16-00-54.png"></p>
+<ul>
+<li>确保本地Python环境为Python3.6+之后，我们需要将项目下载到本地。</li>
+</ul>
+<p>项目下载地址：<br><a target="_blank" rel="noopener" href="https://github.com/NyanChanMeow/SSRSpeed/releases">https://github.com/NyanChanMeow/SSRSpeed/releases</a><br>(请下载.zip文件，并解压。)</p>
+<ul>
+<li>打开命令行，切换到解压缩好的项目路径中，安装通用依赖</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> #完整解压缩目录</span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>安装完成通用依赖之后，我们可以通过不同方式对我们使用的线路进行测试（其他参数请查看Github项目Readme）</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#输入订阅地址</span><br><span class="line">python main.py -u https://xxx.xxx.xxx</span><br><span class="line">#键入配置文件路径</span><br><span class="line">python main.py -c \xxx\xxx\gui-config.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后根据提示进行操作即可，测试完成之后会输出.png的测试图，位于results文件夹内。</li>
+</ul>
+<hr>
+<h1 id="Linux下配置及使用"><a href="#Linux下配置及使用" class="headerlink" title="Linux下配置及使用"></a>Linux下配置及使用</h1><p>对于Linux环境，建议使用 Ubuntu 18.04 LTS，好处是不需要自行安装python3.6+（逃</p>
+<ul>
+<li>首先需要检查Python版本是否符合要求，输出Python版本号大于3.6即可</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@Ubuntu:# python</span><br><span class="line">Python 3.6.7 (default, Oct 22 2018, 11:32:17) </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>确保符合对应版本之后，我们还需要安装依赖 libsodium Shadowsocks-libev 以及 Simple-Obfs</p>
+</li>
+<li><p>安装libsodium</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">apt-get install build-essential</span><br><span class="line">wget https://github.com/jedisct1/libsodium/releases/download/1.0.15/libsodium-1.0.15.tar.gz</span><br><span class="line">tar xf libsodium-1.0.15.tar.gz &amp;&amp; cd libsodium-1.0.15</span><br><span class="line">./configure &amp;&amp; make -j2 &amp;&amp; make install</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>安装Shadowsocks-libev</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install shadowsocks-libev</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装Simple-Obfs</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install --no-install-recommends build-essential autoconf libtool libssl-dev libpcre3-dev libev-dev asciidoc xmlto automake</span><br><span class="line">git clone https://github.com/shadowsocks/simple-obfs.git</span><br><span class="line">cd simple-obfs</span><br><span class="line">git submodule update --init --recursive</span><br><span class="line">./autogen.sh</span><br><span class="line">./configure &amp;&amp; make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将所有依赖安装完成之后，拉取项目文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y git</span><br><span class="line">git clone -b Dev https://github.com/NyanChanMeow/SSRSpeed.git</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>进入到项目目录中，安装通用依赖，即可进行测试（其他参数请查看Github项目Readme）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd SSRSpeed</span><br><span class="line">pip3 install -r requirements.txt</span><br><span class="line"><span class="meta">#</span><span class="bash">输入订阅地址</span></span><br><span class="line">python3 main.py -u https://xxx.xxx.xxx</span><br><span class="line"><span class="meta">#</span><span class="bash">键入配置文件路径</span></span><br><span class="line">python3 main.py -c \xxx\xxx\gui-config.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后根据提示进行操作即可，测试完成之后会输出.png的测试图，位于results文件夹内</li>
+</ul>
+<hr>
+<p>感谢原文作者：<a target="_blank" rel="noopener" href="https://golby.cc/index.php/172">golby</a></p>
+<p><strong>如果出现测速为0，而您的机场又一切正常的情况，请参考这个<a target="_blank" rel="noopener" href="https://github.com/NyanChanMeow/SSRSpeed/issues/118">issues</a>，修改ssrspeed_config.json文件中，downloadlinks里第一条link失效，把链接改为第二条link即可解决。</strong></p>
+<p><img src="https://i.loli.net/2020/09/07/UJRlhYsP2xTdLFo.png" alt="Snipaste_2020-09-07_18-05-56.png"></p>
+<p>PS：<br><strong>每次测速都要输入代码，感觉麻烦，故自己做了一份.bat脚本，请有需要的人自己获取。</strong></p>
+<p><strong>新建文本，拷贝如下代码，改名为speed.bat,并放置在SSRSpeed文件夹根目录下即可。</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">TITLE</span> BAT脚本-SSRSpeed测速-自动化</span><br><span class="line">@<span class="built_in">COLOR</span> A</span><br><span class="line">@<span class="built_in">MODE</span> <span class="built_in">CON</span>: COLS=<span class="number">80</span> LINES=<span class="number">24</span></span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>    ----------------------------------</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>		SSRSpeed-Speedtest automation script</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>		Based on:SSRSpeed-Python</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>    ----------------------------------</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>		Powered By B.B</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">echo</span>.</span><br><span class="line">@<span class="built_in">pause</span></span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">python main.py -u https://xxx.xxx.xxx</span><br><span class="line">@<span class="built_in">COLOR</span> A</span><br><span class="line">:: 注意：请把https://xxx.xxx.xxx变更为你需要测速的订阅地址</span><br><span class="line">@<span class="built_in">cmd</span> /k</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Boris
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://boriskp.github.io/SSRSpeed/" title="SSRSpeed-基于Shadowsocks(R)的批量测速工具">https://boriskp.github.io/SSRSpeed/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-check"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NAS/" rel="tag"># NAS</a>
+              <a href="/tags/VPS/" rel="tag"># VPS</a>
+              <a href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag"># 插件</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/pull-warning/" rel="prev" title="git上传代码失败，报警正在向当前仓库加载另一个远程仓库的解决办法">
+      <i class="fa fa-chevron-left"></i> git上传代码失败，报警正在向当前仓库加载另一个远程仓库的解决办法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/macOS-Restricted-permissions/" rel="next" title="macOS打开软件提示损坏/打不开/系统权限不足的解决方法(附Catalina系统目录写入权限的姿势)">
+      macOS打开软件提示损坏/打不开/系统权限不足的解决方法(附Catalina系统目录写入权限的姿势) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="nav-text">Windows下配置及使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="nav-text">Linux下配置及使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Boris"
+      src="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+  <p class="site-author-name" itemprop="name">Boris</p>
+  <div class="site-description" itemprop="description">Boris的备份博客，另一个鸡蛋篮子</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Boris</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">49k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">44 分钟</span>
+</div>
+<div></div>
+&rarr;
+<!-- 在网页底部添加网站运行时间 -->
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/21/2016 00:00:00");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = " 持续运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+&larr;
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

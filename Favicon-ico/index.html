@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"boriskp.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="自己制作一个网站，看着它在自己的手里慢慢变成自己所希望的样子，这个过程是美好的，也是愉悦的，比起枯燥的工作来说，让人充满了动力。其实制作网站和装修一样，都是一个折腾，再折腾，又折腾的过程，让人着迷，后续有机会我也会更新些关于家装的分享帖（现在就挖坑真的好吗？）（笑） :joy:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缩略的网站标志(角标)的制作--Favicon.ico">
+<meta property="og:url" content="https://boriskp.github.io/Favicon-ico/index.html">
+<meta property="og:site_name" content="Boris的备份库房">
+<meta property="og:description" content="自己制作一个网站，看着它在自己的手里慢慢变成自己所希望的样子，这个过程是美好的，也是愉悦的，比起枯燥的工作来说，让人充满了动力。其实制作网站和装修一样，都是一个折腾，再折腾，又折腾的过程，让人着迷，后续有机会我也会更新些关于家装的分享帖（现在就挖坑真的好吗？）（笑） :joy:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/07/16/5d2d8b8a4363b44299.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/07/16/5d2d8f33ba1e014081.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/07/16/5d2d8f96a33a718243.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/07/16/5d2d9013725cd58141.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/07/16/5d2da6af32b4e56335.png">
+<meta property="article:published_time" content="2019-08-03T15:35:11.000Z">
+<meta property="article:modified_time" content="2021-06-27T07:28:47.901Z">
+<meta property="article:author" content="Boris">
+<meta property="article:tag" content="建站">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/07/16/5d2d8b8a4363b44299.jpg">
+
+<link rel="canonical" href="https://boriskp.github.io/Favicon-ico/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>缩略的网站标志(角标)的制作--Favicon.ico | Boris的备份库房</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Boris的备份库房</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/Favicon-ico/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+      <meta itemprop="name" content="Boris">
+      <meta itemprop="description" content="Boris的备份博客，另一个鸡蛋篮子">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boris的备份库房">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          缩略的网站标志(角标)的制作--Favicon.ico
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-03 23:35:11" itemprop="dateCreated datePublished" datetime="2019-08-03T23:35:11+08:00">2019-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-27 15:28:47" itemprop="dateModified" datetime="2021-06-27T15:28:47+08:00">2021-06-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">折腾笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>自己制作一个网站，看着它在自己的手里慢慢变成自己所希望的样子，这个过程是美好的，也是愉悦的，比起枯燥的工作来说，让人充满了动力。<br>其实制作网站和装修一样，都是一个折腾，再折腾，又折腾的过程，让人着迷，后续有机会我也会更新些关于家装的分享帖（现在就挖坑真的好吗？）（笑） :joy: </p>
+<span id="more"></span>
+
+<hr>
+<p>本次要说的主要是”Favicon.ico”,如下是一段关于favicon图标的介绍:</p>
+<blockquote>
+<h3 id="favicon-ico一般用于作为缩略的网站标志，它显示在浏览器的地址栏、浏览器标签上或者在收藏夹上，是展示网站个性的缩略logo标志，也可以说是网站头像-目前主要的浏览器都支持favicon-ico图标，如果要让网站看起来更专业、更美、更有个性，favicon-ico是必不可少的，你在本站使用ICO图标转换工具就可以轻松将您的网站图标转换成favicon-ico。"><a href="#favicon-ico一般用于作为缩略的网站标志，它显示在浏览器的地址栏、浏览器标签上或者在收藏夹上，是展示网站个性的缩略logo标志，也可以说是网站头像-目前主要的浏览器都支持favicon-ico图标，如果要让网站看起来更专业、更美、更有个性，favicon-ico是必不可少的，你在本站使用ICO图标转换工具就可以轻松将您的网站图标转换成favicon-ico。" class="headerlink" title="favicon.ico一般用于作为缩略的网站标志，它显示在浏览器的地址栏、浏览器标签上或者在收藏夹上，是展示网站个性的缩略logo标志，也可以说是网站头像,目前主要的浏览器都支持favicon.ico图标，如果要让网站看起来更专业、更美、更有个性，favicon.ico是必不可少的，你在本站使用ICO图标转换工具就可以轻松将您的网站图标转换成favicon.ico。"></a>favicon.ico一般用于作为缩略的网站标志，它显示在浏览器的地址栏、浏览器标签上或者在收藏夹上，是展示网站个性的缩略logo标志，也可以说是网站头像,目前主要的浏览器都支持favicon.ico图标，如果要让网站看起来更专业、更美、更有个性，favicon.ico是必不可少的，你在本站使用ICO图标转换工具就可以轻松将您的网站图标转换成favicon.ico。</h3></blockquote>
+<p> 详细的介绍你也可以浏览如下链接:<br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Favicon">Favicon.ico的wiki百科</a></p>
+<p>简而言之:Favicon.ico就是可以让你的网页有如下的效果:<br><img src="https://i.loli.net/2019/07/16/5d2d8b8a4363b44299.jpg" alt="Favicon.ico"><br>如上图的红色框,就是这个效果啦~</p>
+<p>也许不是所有人都在乎这个标志，但在乎细节的人，他的网页上就一定有这个角标。</p>
+<hr>
+<p>分享一个制作  链接：</p>
+<blockquote>
+<p>  <a target="_blank" rel="noopener" href="http://www.faviconico.org/">http://www.faviconico.org/</a></p>
+</blockquote>
+<p>下面是如何在您的网站中加入此图标的教程：</p>
+<ol>
+<li><p>如何使用Favicon.ico？<br>直接在你的主页中加入如下代码,然后把制作好的<code>Favicon.ico</code>放入你网站的根目录中即可.<br>注意，是放在你网站主页的 <code>&lt;head&gt; &lt;/head&gt;</code>之间哟~</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;shortcut icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/favicon.ico&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;bookmark&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/favicon.ico&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我的主页是<code>index.php</code>而不是<code>index.html</code>如何添加？<br>如果你和我一样，使用的是WordPress，那么好办，直接进入“仪表盘-外观-主题-对你当前使用的主题进行自定义”<br><img src="https://i.loli.net/2019/07/16/5d2d8f33ba1e014081.jpg" alt="Favicon.wordpress.jpg"><br>对自定义主题进行“站点身份”管理，直接添加图片即可。<br><img src="https://i.loli.net/2019/07/16/5d2d8f96a33a718243.jpg" alt="zhuti1.jpg">  <img src="https://i.loli.net/2019/07/16/5d2d9013725cd58141.jpg" alt="zhuti2.jpg"><br>如果你使用的不是WordPress，那么可能需要你要到网站的主页文件<code>index.php</code>看看他是如何引用的，再做更改，这里篇幅较长，不做说明</p>
+</li>
+</ol>
+<hr>
+<p>如果你的网站favicon.ico 不起作用，或者是想要让favicon.ico 的兼容性更好，要使用下面几个步骤：</p>
+<p>1：检查网站根目录下面的favicon.ico,也就是：<code>http://host/favicon.ico</code> 而不是<code>http://host/some/favicon.ico</code><br>(该图标的路径一定要使用绝对路径)<br>2：确保</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;shortcut icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/favicon.ico&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;bookmark&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/favicon.ico&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用的是<code>http://host/favicon.ico</code> 而不是其他目录文件，并确认文件名一致</p>
+<p>3：如果你的网站带端口，或者是测试版本的话，那么尤其要注意360等浏览器，它们在请求<code>favicon.ico</code> 的时候会忽略端口号的。</p>
+<hr>
+<p>如果你想看看别人（百度）都用的是什么<code>Favicon.ico</code>,伟大的Google已经帮你做好了，只需要点击如下的链接就可以看到，更换你所需要查看的站点替代<code>baidu.com</code>即可.<br><a target="_blank" rel="noopener" href="https://www.google.com/s2/favicons?domain=baidu.com" title="https://www.google.com/s2/favicons?domain=baidu.com">https://www.google.com/s2/favicons?domain=baidu.com</a></p>
+<p>最后是我的favicon.ico，请各位查看~<br>(可能有些大哟)<br><img src="https://i.loli.net/2019/07/16/5d2da6af32b4e56335.png" alt="ziji.png"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Boris
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://boriskp.github.io/Favicon-ico/" title="缩略的网站标志(角标)的制作--Favicon.ico">https://boriskp.github.io/Favicon-ico/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-check"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag"># 建站</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/tuchuang/" rel="prev" title="关于我经常使用的图床">
+      <i class="fa fa-chevron-left"></i> 关于我经常使用的图床
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/vim/" rel="next" title="Linux Shell基础命令-----vim">
+      Linux Shell基础命令-----vim <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#favicon-ico%E4%B8%80%E8%88%AC%E7%94%A8%E4%BA%8E%E4%BD%9C%E4%B8%BA%E7%BC%A9%E7%95%A5%E7%9A%84%E7%BD%91%E7%AB%99%E6%A0%87%E5%BF%97%EF%BC%8C%E5%AE%83%E6%98%BE%E7%A4%BA%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E5%9C%B0%E5%9D%80%E6%A0%8F%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8%E6%A0%87%E7%AD%BE%E4%B8%8A%E6%88%96%E8%80%85%E5%9C%A8%E6%94%B6%E8%97%8F%E5%A4%B9%E4%B8%8A%EF%BC%8C%E6%98%AF%E5%B1%95%E7%A4%BA%E7%BD%91%E7%AB%99%E4%B8%AA%E6%80%A7%E7%9A%84%E7%BC%A9%E7%95%A5logo%E6%A0%87%E5%BF%97%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%AF%B4%E6%98%AF%E7%BD%91%E7%AB%99%E5%A4%B4%E5%83%8F-%E7%9B%AE%E5%89%8D%E4%B8%BB%E8%A6%81%E7%9A%84%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%BD%E6%94%AF%E6%8C%81favicon-ico%E5%9B%BE%E6%A0%87%EF%BC%8C%E5%A6%82%E6%9E%9C%E8%A6%81%E8%AE%A9%E7%BD%91%E7%AB%99%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%9B%B4%E4%B8%93%E4%B8%9A%E3%80%81%E6%9B%B4%E7%BE%8E%E3%80%81%E6%9B%B4%E6%9C%89%E4%B8%AA%E6%80%A7%EF%BC%8Cfavicon-ico%E6%98%AF%E5%BF%85%E4%B8%8D%E5%8F%AF%E5%B0%91%E7%9A%84%EF%BC%8C%E4%BD%A0%E5%9C%A8%E6%9C%AC%E7%AB%99%E4%BD%BF%E7%94%A8ICO%E5%9B%BE%E6%A0%87%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BD%BB%E6%9D%BE%E5%B0%86%E6%82%A8%E7%9A%84%E7%BD%91%E7%AB%99%E5%9B%BE%E6%A0%87%E8%BD%AC%E6%8D%A2%E6%88%90favicon-ico%E3%80%82"><span class="nav-text">favicon.ico一般用于作为缩略的网站标志，它显示在浏览器的地址栏、浏览器标签上或者在收藏夹上，是展示网站个性的缩略logo标志，也可以说是网站头像,目前主要的浏览器都支持favicon.ico图标，如果要让网站看起来更专业、更美、更有个性，favicon.ico是必不可少的，你在本站使用ICO图标转换工具就可以轻松将您的网站图标转换成favicon.ico。</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Boris"
+      src="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
+  <p class="site-author-name" itemprop="name">Boris</p>
+  <div class="site-description" itemprop="description">Boris的备份博客，另一个鸡蛋篮子</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Boris</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">49k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">44 分钟</span>
+</div>
+<div></div>
+&rarr;
+<!-- 在网页底部添加网站运行时间 -->
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/21/2016 00:00:00");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = " 持续运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+&larr;
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
