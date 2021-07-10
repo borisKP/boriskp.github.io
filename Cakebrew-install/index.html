@@ -20,23 +20,27 @@
     var CONFIG = {"hostname":"boriskp.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="随着2020年7月29日到来，Node.js 上最快的静态站点生成器 Hexo 发布了 5.0.0 版本。升级系统固然很简单，不过根据我的经验，在大版本更新后，一些小的坑肯定是有的，本文主要说明我在升级后遇到的坑，以及解决方案。">
+  <meta name="description" content="Cakebrew是一款macOS平台的图形化管理工具。 有了它，妈妈再也不用担心我记不住brew命令了！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo版本更新报错： &quot;external_link&quot;">
-<meta property="og:url" content="https://boriskp.github.io/upgrade-hexo-to-v5-1-1/index.html">
+<meta property="og:title" content="非常好用的 Homebrew 图形化管理软件Cakebrew">
+<meta property="og:url" content="https://boriskp.github.io/Cakebrew-install/index.html">
 <meta property="og:site_name" content="Boris的备份库房">
-<meta property="og:description" content="随着2020年7月29日到来，Node.js 上最快的静态站点生成器 Hexo 发布了 5.0.0 版本。升级系统固然很简单，不过根据我的经验，在大版本更新后，一些小的坑肯定是有的，本文主要说明我在升级后遇到的坑，以及解决方案。">
+<meta property="og:description" content="Cakebrew是一款macOS平台的图形化管理工具。 有了它，妈妈再也不用担心我记不住brew命令了！">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/09/01/Es7mMCiKSYbWc4P.png">
-<meta property="og:image" content="https://i.loli.net/2020/09/01/HEWkZs4XhMBfixz.jpg">
-<meta property="article:published_time" content="2020-09-01T03:19:54.000Z">
-<meta property="article:modified_time" content="2021-06-27T07:28:47.904Z">
+<meta property="og:image" content="https://i.loli.net/2021/07/10/nFqP8mVHb1M2kxD.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/10/53sqjZUEY9yDzGh.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/10/SPBEQG6wX7isgze.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/10/wC7IVoNkP2b9LUu.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/10/pjCehJQlHiVY8mr.png">
+<meta property="article:published_time" content="2021-07-10T14:13:14.000Z">
+<meta property="article:modified_time" content="2021-07-10T14:22:29.885Z">
 <meta property="article:author" content="Boris">
-<meta property="article:tag" content="服务器">
+<meta property="article:tag" content="建站">
+<meta property="article:tag" content="macOS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/09/01/Es7mMCiKSYbWc4P.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/07/10/nFqP8mVHb1M2kxD.png">
 
-<link rel="canonical" href="https://boriskp.github.io/upgrade-hexo-to-v5-1-1/">
+<link rel="canonical" href="https://boriskp.github.io/Cakebrew-install/">
 
 
 <script id="page-configurations">
@@ -49,7 +53,7 @@
   };
 </script>
 
-  <title>hexo版本更新报错： "external_link" | Boris的备份库房</title>
+  <title>非常好用的 Homebrew 图形化管理软件Cakebrew | Boris的备份库房</title>
   
 
 
@@ -170,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/upgrade-hexo-to-v5-1-1/">
+    <link itemprop="mainEntityOfPage" href="https://boriskp.github.io/Cakebrew-install/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s.gravatar.com/avatar/bb668aadfe21a984ae33a34173c5d74c?s=80">
@@ -183,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hexo版本更新报错： "external_link"
+          非常好用的 Homebrew 图形化管理软件Cakebrew
         </h1>
 
         <div class="post-meta">
@@ -192,16 +196,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-09-01 11:19:54" itemprop="dateCreated datePublished" datetime="2020-09-01T11:19:54+08:00">2020-09-01</time>
+              <time title="创建时间：2021-07-10 22:13:14 / 修改时间：22:22:29" itemprop="dateCreated datePublished" datetime="2021-07-10T22:13:14+08:00">2021-07-10</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-27 15:28:47" itemprop="dateModified" datetime="2021-06-27T15:28:47+08:00">2021-06-27</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -225,7 +223,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>679</span>
+              <span>1.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -244,25 +242,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://i.loli.net/2020/09/01/Es7mMCiKSYbWc4P.png" alt="hexo-5.png"></p>
-<p>随着2020年7月29日到来，Node.js 上最快的静态站点生成器 Hexo 发布了 5.0.0 版本。升级系统固然很简单，不过根据我的经验，在大版本更新后，一些小的坑肯定是有的，本文主要说明我在升级后遇到的坑，以及解决方案。</p>
+        <p><a target="_blank" rel="noopener" href="https://www.cakebrew.com/">Cakebrew</a>是一款macOS平台的图形化管理工具。</p>
+<p>有了它，妈妈再也不用担心我记不住<code>brew</code>命令了！</p>
+<p><img src="https://i.loli.net/2021/07/10/nFqP8mVHb1M2kxD.png" alt="Cakebrew-home.png"></p>
 <span id="more"></span>
 
-<p>在hexo5.0.0新版本后,运行<code>hexo s</code>或者<code>hexo g</code>的时候会出现如下的报错情况：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">报错：</span><br><span class="line">INFO  Validating config</span><br><span class="line">WARN  Deprecated config detected: &quot;external_link&quot; with a Boolean value is deprecated. See https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;configuration for more details.</span><br></pre></td></tr></table></figure>
-
-<p>查回<a target="_blank" rel="noopener" href="https://hexo.io/news/2020/07/29/hexo-5-released/">官网更新版本信息</a>，可以看到官网的Breaking change中，有关于设置更改的选项。</p>
-<p><img src="https://i.loli.net/2020/09/01/HEWkZs4XhMBfixz.jpg" alt="222.jpg"></p>
-<p>经过查找，解决方案如下：</p>
-<p>打开主目录下的<code>_config.yml</code><br>找到：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">external_link: true # Open external links in new tab</span><br></pre></td></tr></table></figure>
-
-<p>修改成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">external_link:</span><br><span class="line">  enable: true # Open external links in new tab</span><br><span class="line">  field: site # Apply to the whole site</span><br><span class="line">  exclude: &#39;&#39;</span><br></pre></td></tr></table></figure>
-<p>即可解决问题。</p>
+<h2 id="Cakebrew是什么？"><a href="#Cakebrew是什么？" class="headerlink" title="Cakebrew是什么？"></a>Cakebrew是什么？</h2><p>Cakebrew是macOS平台上一款管理Homebrew的应用，采用绝佳的可视化管理页面，从而摆脱命令行的束缚，点点鼠标、动动触摸板，即可完成全部的操作。</p>
+<p>目前 Cakebrew 支持 Intel 和 ARM(M1) 两种架构，多国语言支持（<strong>支持简体中文哦</strong>）。</p>
+<h2 id="Cakebrew简介"><a href="#Cakebrew简介" class="headerlink" title="Cakebrew简介"></a>Cakebrew简介</h2><p><a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew</a>是一款基于macOS系统的package管理器。我在上一篇文章介绍了如何安装Homebrew的终极方法（<a href="https://boriskp.github.io/install-brew/">点击这里查看</a>）。</p>
+<p>但是Homebrew有个小问题<del>（主要是因为我太懒）</del><br>就是Homebrew没有GUI，也就是没有图形化的操作界面，全部需要以命令行的形式进行操作。<br>对于大多数程序员还好，只要经常使用，简单几个命令也能熟记。<br>但对于我而言，一个优美的图形化界面更适合我。<br>前两天在GitHub浏览的时候，发现了这个有着3.8k Star的项目—<a target="_blank" rel="noopener" href="https://www.cakebrew.com/">Cakebrew</a></p>
+<h2 id="Cakebrew的UI以及大致用法演示"><a href="#Cakebrew的UI以及大致用法演示" class="headerlink" title="Cakebrew的UI以及大致用法演示"></a>Cakebrew的UI以及大致用法演示</h2><p><img src="https://i.loli.net/2021/07/10/53sqjZUEY9yDzGh.png" alt="Cakebrew-ui.png"><br>如上图，非常直观，整个UI为分栏设计，左边是你的Formulae分类，左上角的🌐地球仪按钮是更新你的Homebrew，点击就会自动升级你的Homebrew。<br>右上可以看到你全部安装的Formulae以及版本信息，再也不用找个小本本一条一条记录版本信息了。<br>右下显示的是每个Formulae的信息，尤其可以显示“依赖”与“冲突”。看到这个我直呼：“非常的人性化”</p>
+<p><img src="https://i.loli.net/2021/07/10/SPBEQG6wX7isgze.png" alt="Cakebrew-Formulae.png"></p>
+<p>其他用法相信聪明的你打开Cakebrew就可以完全理解。</p>
+<p>除此之外，Cakebrew还支持直接点击自动执行<code>brew cleanup</code>命令。</p>
 <blockquote>
-<p>具体升级信息请查如下blog写的很详细。<br><a target="_blank" rel="noopener" href="https://blog.skk.moe/post/hexo-5/">https://blog.skk.moe/post/hexo-5/</a><br><a target="_blank" rel="noopener" href="https://tommy.net.cn/2020/08/08/upgrade-hexo-to-v5-0-0/">https://tommy.net.cn/2020/08/08/upgrade-hexo-to-v5-0-0/</a></p>
+<p>Mac电脑的内存与硬盘永远是“金子”般的存在。<br>尤其是在M1芯片这边，当你的Mac不够了的时候。<br>不妨想想，是否之前有同感Homebrew安装过很多“一次性”的开发环境和工具包。<br>Homebrew有个特性，就是不会帮我们自动移除旧版本的软件包,你需要手动执行命令去移除软件包。<br>在Cakebrew中，可以用鼠标点击的方式自动执行<code>brew cleanup</code>命令用于清理。<br>强烈建议清理器，手动执行<code>brew cleanup -n</code>查看可清理的旧版本包，<em>注意！此命令不执行具体操作。</em></p>
 </blockquote>
+<p><img src="https://i.loli.net/2021/07/10/wC7IVoNkP2b9LUu.png" alt="Cakebrew-cleanup.png"></p>
+<h2 id="Cakebrew的下载与安装。"><a href="#Cakebrew的下载与安装。" class="headerlink" title="Cakebrew的下载与安装。"></a>Cakebrew的下载与安装。</h2><p>Cakebrew的安装有如下2中方式。（推荐第二种，无脑粗暴）<br>1.你可以直接去官网下载，然后通过直接拉入“应用程序”的文件夹中进行安装。</p>
+<pre><code>官方网站：https://www.cakebrew.com/
+GitHub源码：https://github.com/brunophilipe/Cakebrew</code></pre>
+<p>2.当然，你可通过在 <em>终端</em> 中输入以下命令进行自动安装。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install --cask cakebrew</span><br></pre></td></tr></table></figure>
+<p>实例如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">XXX@XXX ~ % brew install --cask cakebrew</span><br><span class="line">==&gt; Downloading https://cakebrew-377a.kxcdn.com/cakebrew-1.3.zip</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">####################################################################### 100.0%</span></span></span><br><span class="line">==&gt; Installing Cask cakebrew</span><br><span class="line">==&gt; Moving App &#x27;Cakebrew.app&#x27; to &#x27;/Applications/Cakebrew.app&#x27;</span><br><span class="line">🍺  cakebrew was successfully installed!</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>需要注意的是：Cakebrew不提供Homebrew本体的安装。<br>如果你还未安装Homebrew，你可以去<a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew官网</a>安装，<br>也可以查看下我之前的文章（<a href="https://boriskp.github.io/install-brew/">点击这里</a>）</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/07/10/pjCehJQlHiVY8mr.png" alt="Cakebrew-install.png"></p>
+<p>最后，请愉快使用的同时，记得去GitHub上给原作者星星⭐️啊！！！</p>
+<p><strong><a target="_blank" rel="noopener" href="https://github.com/brunophilipe/Cakebrew">https://github.com/brunophilipe/Cakebrew</a></strong></p>
 
     </div>
 
@@ -278,7 +289,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://boriskp.github.io/upgrade-hexo-to-v5-1-1/" title="hexo版本更新报错： "external_link"">https://boriskp.github.io/upgrade-hexo-to-v5-1-1/</a>
+    <a href="https://boriskp.github.io/Cakebrew-install/" title="非常好用的 Homebrew 图形化管理软件Cakebrew">https://boriskp.github.io/Cakebrew-install/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -297,7 +308,8 @@
 </div>
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag"># 服务器</a>
+              <a href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag"># 建站</a>
+              <a href="/tags/macOS/" rel="tag"># macOS</a>
           </div>
 
         
@@ -306,13 +318,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/not-connected-to-the-github/" rel="prev" title="解决Github打不开问题">
-      <i class="fa fa-chevron-left"></i> 解决Github打不开问题
+    <a href="/install-brew/" rel="prev" title="安装brew的终极解决方法">
+      <i class="fa fa-chevron-left"></i> 安装brew的终极解决方法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/DSM-ROOT/" rel="next" title="群晖DSM系统获取root权限">
-      群晖DSM系统获取root权限 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -371,6 +380,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cakebrew%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-text">Cakebrew是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cakebrew%E7%AE%80%E4%BB%8B"><span class="nav-text">Cakebrew简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cakebrew%E7%9A%84UI%E4%BB%A5%E5%8F%8A%E5%A4%A7%E8%87%B4%E7%94%A8%E6%B3%95%E6%BC%94%E7%A4%BA"><span class="nav-text">Cakebrew的UI以及大致用法演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cakebrew%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85%E3%80%82"><span class="nav-text">Cakebrew的下载与安装。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
